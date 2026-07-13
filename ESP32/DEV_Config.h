@@ -49,10 +49,10 @@
 #define EPD_SCK_PIN     8    // Hardware SPI SCK (D8)
 #define EPD_MOSI_PIN    10   // Hardware SPI MOSI (D10)
 #define EPD_CS_PIN      20   // Chip Select (D7 / GPIO20)
-#define EPD_RST_PIN     4    // Reset (D0 / GPIO2)
-#define EPD_DC_PIN      5    // Data/Command (D1 / GPIO3)
-#define EPD_BUSY_PIN    3    // Busy Pin (D2 / GPIO4)
-#define EPD_PWR_PIN     -1    // Power Pin (D3 / GPIO5)
+#define EPD_RST_PIN     4    // Reset (D2 / GPIO4)
+#define EPD_DC_PIN      5    // Data/Command (D3 / GPIO5)
+#define EPD_BUSY_PIN    3    // Busy Pin (D1 / GPIO3)
+#define EPD_PWR_PIN     -1
 
 
 
