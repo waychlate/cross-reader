@@ -17,7 +17,11 @@ class MappedInputManager {
 
   MappedInputManager(HalGPIO& gpio, const GfxRenderer& renderer) : gpio(gpio), renderer(renderer) {}
 
-  void update() const { gpio.update(); }
+  void update() const {
+    gpio.update();
+    virtualPressed = 0;
+    virtualReleased = 0;
+  }
   bool wasPressed(Button button) const;
   bool wasReleased(Button button) const;
   bool isPressed(Button button) const;
@@ -34,6 +38,16 @@ class MappedInputManager {
   // so portrait UI (home, settings) never swaps while the reader and its menus do.
   [[nodiscard]] bool isNavDirectionSwapped() const;
 
+  void injectPress(Button button) const {
+    virtualPressed |= (1 << static_cast<int>(button));
+    virtualState |= (1 << static_cast<int>(button));
+  }
+  
+  void injectRelease(Button button) const {
+    virtualReleased |= (1 << static_cast<int>(button));
+    virtualState &= ~(1 << static_cast<int>(button));
+  }
+
  private:
   HalGPIO& gpio;
   // Logical-to-physical button mapping depends on what the user is actually looking at: when the
@@ -42,6 +56,10 @@ class MappedInputManager {
   // read it here instead of CrossPointSettings.orientation, which is just the persisted reader
   // preference and stays "rotated" even while portrait UI like home/settings is on screen.
   const GfxRenderer& renderer;
+
+  mutable uint16_t virtualPressed = 0;
+  mutable uint16_t virtualReleased = 0;
+  mutable uint16_t virtualState = 0;
 
   bool mapButton(Button button, bool (HalGPIO::*fn)(uint8_t) const) const;
 };

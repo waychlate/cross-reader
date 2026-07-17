@@ -192,6 +192,13 @@ HalGPIO::DeviceType detectDeviceTypeWithFingerprint() {
 
 void HalGPIO::begin() {
   inputMgr.begin();
+#if FREEINK_DEVICE_WAVESHARE_5IN0
+  // Deselect SD CS (GPIO 2) and Display CS (GPIO 20) early to prevent bus contention during startup
+  pinMode(2, OUTPUT);
+  digitalWrite(2, HIGH);
+  pinMode(20, OUTPUT);
+  digitalWrite(20, HIGH);
+#endif
   SPI.begin(EPD_SCLK, SPI_MISO, EPD_MOSI, EPD_CS);
 
   _deviceType = detectDeviceTypeWithFingerprint();
@@ -287,6 +294,9 @@ bool HalGPIO::isUsbConnected() const {
 }
 
 HalGPIO::WakeupReason HalGPIO::getWakeupReason() const {
+#if FREEINK_DEVICE_WAVESHARE_5IN0
+  return WakeupReason::Other;
+#endif
   const auto wakeupCause = esp_sleep_get_wakeup_cause();
   const auto resetReason = esp_reset_reason();
 

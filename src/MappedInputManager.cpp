@@ -74,15 +74,25 @@ bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint
   return false;
 }
 
-bool MappedInputManager::wasPressed(const Button button) const { return mapButton(button, &HalGPIO::wasPressed); }
+bool MappedInputManager::wasPressed(const Button button) const {
+  return mapButton(button, &HalGPIO::wasPressed) || (virtualPressed & (1 << static_cast<int>(button))) != 0;
+}
 
-bool MappedInputManager::wasReleased(const Button button) const { return mapButton(button, &HalGPIO::wasReleased); }
+bool MappedInputManager::wasReleased(const Button button) const {
+  return mapButton(button, &HalGPIO::wasReleased) || (virtualReleased & (1 << static_cast<int>(button))) != 0;
+}
 
-bool MappedInputManager::isPressed(const Button button) const { return mapButton(button, &HalGPIO::isPressed); }
+bool MappedInputManager::isPressed(const Button button) const {
+  return mapButton(button, &HalGPIO::isPressed) || (virtualState & (1 << static_cast<int>(button))) != 0;
+}
 
-bool MappedInputManager::wasAnyPressed() const { return gpio.wasAnyPressed(); }
+bool MappedInputManager::wasAnyPressed() const {
+  return gpio.wasAnyPressed() || virtualPressed != 0;
+}
 
-bool MappedInputManager::wasAnyReleased() const { return gpio.wasAnyReleased(); }
+bool MappedInputManager::wasAnyReleased() const {
+  return gpio.wasAnyReleased() || virtualReleased != 0;
+}
 
 unsigned long MappedInputManager::getHeldTime() const { return gpio.getHeldTime(); }
 

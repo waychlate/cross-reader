@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Print.h>
-#include <common/FsApiConstants.h>  // for oflag_t
+#include <SdFat.h>                  // for oflag_t and file flags
 #include <freertos/semphr.h>
 
 #include <memory>

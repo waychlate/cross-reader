@@ -3,15 +3,26 @@
 #include <Arduino.h>
 #include <InputManager.h>
 
-// Display SPI pins (custom pins for XteinkX4, not hardware SPI defaults)
+// Display SPI pins (custom pins for XteinkX4/Waveshare, not hardware SPI defaults)
 #define EPD_SCLK 8   // SPI Clock
 #define EPD_MOSI 10  // SPI MOSI (Master Out Slave In)
+#if FREEINK_DEVICE_WAVESHARE_5IN0
+#define EPD_CS 20    // Chip Select
+#define EPD_DC 5     // Data/Command
+#define EPD_RST 4    // Reset
+#define EPD_BUSY 3   // Busy
+#else
 #define EPD_CS 21    // Chip Select
 #define EPD_DC 4     // Data/Command
 #define EPD_RST 5    // Reset
 #define EPD_BUSY 6   // Busy
+#endif
 
+#if FREEINK_DEVICE_WAVESHARE_5IN0
+#define SPI_MISO 9  // SPI MISO, shared between SD card and display (Master In Slave Out)
+#else
 #define SPI_MISO 7  // SPI MISO, shared between SD card and display (Master In Slave Out)
+#endif
 
 #define BAT_GPIO0 0  // Battery voltage
 
